@@ -1,5 +1,5 @@
 #include "agentepa.h"
-
+#include<omp.h>
 AgentePa::AgentePa()
 {
 
@@ -118,6 +118,7 @@ void AgentePa:: entrenar(int rank , int size, int it , Matrix * qValues , Entorn
 
             sp = est->getEstado()->getIndex();
             r = est->getRecompensa();
+            #pragma omp critical
             qValues->num(qValues->num(s,ac) +
                          a *
                          (r + y * qValues->num(sp,mejorAccion(sp,qValues))
