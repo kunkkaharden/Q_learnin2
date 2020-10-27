@@ -95,8 +95,8 @@ void AgentePa:: entrenar(int rank , int size, int it , Matrix * qValues , Entorn
     }
 
     int s = 0; // estado actual
-    float r;  // recompensa
-    int ac;   //accion
+    float r;   // recompensa
+    int ac;    // accion
 
     int sp;   //estado siguiente
     int pasos =0;  // cantidad de pasos
@@ -156,12 +156,10 @@ void AgentePa:: entrenar(int rank , int size, int it , Matrix * qValues , Entorn
  *
  */
 int AgentePa:: buscaE(int inicio,int rango,Entorno * e){
-    int s = inicio + rand() %   rango/2  ;
-    while(!e->posible(s)){
+    int s = 0 ;
+    do{
         s = inicio + rand() %   rango/2  ;
-
-
-    }
+    }while(!e->posible(s));
 
     return s;
 }

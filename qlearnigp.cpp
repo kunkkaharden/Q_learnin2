@@ -13,15 +13,15 @@ void QlearnigP::entrenar(int it)
     double inicio , fin;
     AgentePa * a ;
     inicio = omp_get_wtime();
-//#pragma omp parallel private(rank, a)
-   // {
+#pragma omp parallel private(rank, a)
+    {
 
-      //  size = omp_get_num_threads();
-       // rank = omp_get_thread_num();
+        size = omp_get_num_threads();
+        rank = omp_get_thread_num();
         a = new AgentePa();
         a->entrenar(rank, size, it,values,entorno);
         delete a;
-  //  }
+    }
     fin = omp_get_wtime();
     cout<<"tiempo: "<<fin - inicio<<endl;
 }
