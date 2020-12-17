@@ -1,5 +1,8 @@
 #include "agentepa.h"
 #include<omp.h>
+#include<entorno.h>
+#include<matrix.h>
+#include<ar.h>
 AgentePa::AgentePa()
 {
 
@@ -78,7 +81,7 @@ int AgentePa::accionRamdon(Matrix * qValues)
 
 }
 void AgentePa:: entrenar(int rank , int size, int it , Matrix * qValues , Entorno * entorno){
-
+    this->rank = rank;
     int menor ,  mayor; //rango inferior y superior de los grupos
 
     int muestra = qValues->filas() / (size -1);
@@ -118,19 +121,19 @@ void AgentePa:: entrenar(int rank , int size, int it , Matrix * qValues , Entorn
 
             sp = est->getEstado()->getIndex();
             r = est->getRecompensa();
-            #pragma omp critical
+#pragma omp critical
             qValues->num(qValues->num(s,ac) +
                          a *
                          (r + y * qValues->num(sp,mejorAccion(sp,qValues))
                           - qValues->num(s,ac) ),s,ac) ;
 
             s = sp;
-            /*  if(rank == 0){
+              if(rank == 0){
                 entorno->mostrar(ac,s);
                 system("pause");
 
-            }*/
-            if(est->getEstado()->getFin() == true || s < menor || s > mayor){
+            }
+            if(est->getEstado()->isTerminal() == true || s < menor || s > mayor){
                 bandera = false;
                 disminuirE();
                 //   cout<<"encontro meta"<<endl;
@@ -147,9 +150,235 @@ void AgentePa:: entrenar(int rank , int size, int it , Matrix * qValues , Entorn
 
         if(rank ==0)
             cout<<"pasos: "<<pasos<<" por "<<rank<<endl;
-         //  system("pause");
+        //  system("pause");
     }
     //****************************************
+
+}
+
+void AgentePa::entrenarSarsa(int rank, int size, int it, Matrix *qValues, Entorno *entorno)
+{
+
+
+    int menor ,  mayor; //rango inferior y superior de los grupos
+
+    int muestra = qValues->filas() / (size -1);
+    if(rank == 0){
+        e = 0.30;
+        menor =0;
+        mayor = qValues->filas();
+    }else if(rank == size - 1){
+        menor = (rank -1) * muestra ;
+        mayor = qValues->filas();
+    }else{
+        menor = (rank -1 )* muestra ;
+        mayor = (rank ) * muestra ;
+    }
+
+    int s = 0; // estado actual
+    float r;   // recompensa
+    int ac;    // accion
+
+    int sp;   //estado siguiente
+    int pasos =0;  // cantidad de pasos
+    Estado_Recompensa * est = new Estado_Recompensa(0,0);
+    bool bandera ; //para el fin de episodio
+    for(int i =0; i < it ; i++){
+        pasos =0;
+        s =0;
+        if(rank !=0){
+            s = buscaE(menor,muestra,entorno);
+        }
+        //*****************************************************************************************************************
+        bandera = true;
+        while(bandera){
+            pasos++;
+            ac = politica(s,qValues);
+            delete est;
+            est = entorno->accion(ac,s);
+
+            sp = est->getEstado()->getIndex();
+            r = est->getRecompensa();
+#pragma omp critical
+            qValues->num(qValues->num(s,ac) +
+                         a *
+                         (r + y * qValues->num(sp,mejorAccion(sp,qValues))
+                          - qValues->num(s,ac) ),s,ac) ;
+
+            s = sp;
+            /*  if(rank == 0){
+                entorno->mostrar(ac,s);
+                system("pause");
+
+            }*/
+            if(est->getEstado()->isTerminal() == true || s < menor || s > mayor){
+                bandera = false;
+                disminuirE();
+                //   cout<<"encontro meta"<<endl;
+                //  agente->getValues()->mostrar();
+                //   system("pause");
+            }
+            if(pasos > 2000){
+                bandera = false;
+
+
+                //   cout<<"Demaciados pasos  >2000"<<endl;
+            }
+
+        }
+        //********************************************************************************************************************
+
+        if(rank ==0)
+            cout<<"pasos: "<<pasos<<" por "<<rank<<endl;
+        //  system("pause");
+    }
+    //****************************************
+
+}
+void AgentePa::entrenarRL(Algoritmo alg, int rank, int size, int it, Matrix *qValues, Entorno *entorno)
+{
+
+    this->rank = rank;
+    int menor ,  mayor , muestra; //rango inferior y superior de los grupos
+
+
+    if(size == 1){
+        menor =0;
+        muestra = mayor = qValues->filas();
+
+    }else if(size > 2){
+         muestra = qValues->filas() / (size -1);
+        if(rank == 0){
+            e = 0.30;
+            menor =0;
+            mayor = qValues->filas();
+        }else if(rank == size - 1){
+            menor = (rank -1) * muestra ;
+            mayor = qValues->filas();
+        }else{
+            menor = (rank -1 )* muestra ;
+            mayor = (rank ) * muestra ;
+        }
+
+    }
+
+
+    int s = 0; // estado actual
+    int pasos =0;  // cantidad de pasos
+
+    for(int i =0; i < it ; i++){
+        pasos =0;
+        s =0;
+        if(rank !=0){
+            s = buscaE(menor,muestra,entorno);
+        }
+        if(alg == Q_Learning)
+            q(s,&pasos,qValues,entorno,menor,mayor);
+        else if(alg == Sarsa){
+//            sarsa(s,&pasos,qValues,entorno);
+        }
+
+        if(rank ==0)
+            cout<<"pasos: "<<pasos<<" por "<<rank<<endl;
+        //  system("pause");
+    }
+
+}
+
+//Q_Learning
+void AgentePa::q(int s,int *pasos, Matrix *qValues,Entorno *entorno,int menor , int mayor)
+{
+    float r;   // recompensa
+    int ac;    // accion
+    int sp;   //estado siguiente
+    Estado_Recompensa * est = new Estado_Recompensa(0,0);
+    bool bandera = true; //para el fin de episodio
+    //**************
+    while(bandera){
+        (*pasos)++;
+         ac = politica(s,qValues);
+        delete est;
+        est = entorno->accion(ac,s);
+
+        sp = est->getEstado()->getIndex();
+        r = est->getRecompensa();
+        //#pragma omp critical
+        qValues->num(qValues->num(s,ac) +
+                     a *
+                     (r + y * qValues->num(sp,mejorAccion(sp,qValues))
+                      - qValues->num(s,ac) ),s,ac) ;
+
+        s = sp;
+        /*  if(rank == 0){
+            entorno->mostrar(ac,s);
+            cout<<"rank: "<<rank<<endl;
+            system("pause");
+
+        }*/
+        if(est->getEstado()->isTerminal() == true || s < menor || s > mayor){
+            bandera = false;
+            disminuirE();
+            //   cout<<"encontro meta"<<endl;
+            //  agente->getValues()->mostrar();
+            //   system("pause");
+        }
+        if((*pasos) > 2000){
+            bandera = false;
+
+
+            //   cout<<"Demaciados pasos  >2000"<<endl;
+        }
+
+    }
+
+}
+
+void AgentePa::sarsa(int s,int *pasos, Matrix *qValues,Entorno *entorno)
+{
+    /*
+    bandera = true;
+    while(bandera){
+        pasos++;
+        ac = politica(s,qValues);
+        delete est;
+        est = entorno->accion(ac,s);
+
+        sp = est->getEstado()->getIndex();
+        r = est->getRecompensa();
+        if(!est->getEstado()->isTerminal()){
+        #pragma omp critical
+            qValues->num(qValues->num(s,ac) +
+                         a *
+                         (r + y * qValues->num(sp,mejorAccion(sp,qValues))
+                          - qValues->num(s,ac) ),s,ac) ;
+
+
+        }else{
+
+
+        }
+
+        s = sp;
+        /*  if(rank == 0){
+            entorno->mostrar(ac,s);
+            system("pause");
+
+        }*//*
+        if(est->getEstado()->isTerminal() || s < menor || s > mayor){
+            bandera = false;
+            disminuirE();
+            //   cout<<"encontro meta"<<endl;
+            //  agente->getValues()->mostrar();
+            //   system("pause");
+        }
+        if(pasos > 2000){
+            bandera = false;
+
+
+            //   cout<<"Demaciados pasos  >2000"<<endl;
+        }
+
+    }*/
 
 }
 /**

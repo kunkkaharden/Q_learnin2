@@ -3,6 +3,7 @@
 #include<matrix.h>
 #include<entorno.h>
 #include<estado.h>
+#include<ar.h>
 
 class AgentePa
 {
@@ -12,6 +13,7 @@ private:
     float a = 0.5;    //[0-1] factor de aprendizaje  0: no se aprende 1: se olvida lo
     //aprendido anteriormente solo se tiene en cuenta la ultima experiencia
     float y = 0.5;    //[0-1] factor de descuento    0: corto plazo  1: largo plazo
+    int rank;
 
 public:
     AgentePa();
@@ -30,6 +32,10 @@ public:
     int buscaE(int inicio, int  muestra ,Entorno *e);
     int politica(int estado, Matrix *qValues);
     void entrenar(int rank, int size, int it, Matrix *qValues, Entorno *entorno);
+    void entrenarSarsa(int rank, int size, int it, Matrix *qValues, Entorno *entorno);
+    void entrenarRL(Algoritmo, int rank, int size, int it, Matrix *qValues, Entorno *entorno);
+    void q(int s, int *pasos, Matrix *qValues, Entorno *entorno, int menor, int mayor);
+    void sarsa(int s,int *pasos, Matrix *qValues,Entorno *entorno);
 
 };
 

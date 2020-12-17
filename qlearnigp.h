@@ -10,10 +10,12 @@ private:
     Matrix * values;
     Entorno * entorno;
     AgentePa * agente;
+
 public:
 
     void entrenar(int it);
     QlearnigP(Matrix *en, Matrix *re);
+    void q_learnig(int s,int *pasos, Matrix *qValues,Entorno *entorno);
 };
 
 #endif // QLEARNIGP_H

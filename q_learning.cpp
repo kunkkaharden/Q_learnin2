@@ -131,3 +131,4 @@ void Q_Learning :: mostrar(){
         }
     }
 }
+

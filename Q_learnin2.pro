@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     recompensa_estado.cpp \
     agenteP.cpp \
     qlearnigp.cpp \
-    agentepa.cpp
+    agentepa.cpp \
+    agentesarsa.cpp
 
 HEADERS += \
     agente.h \
@@ -38,4 +39,6 @@ HEADERS += \
     recompensa_estado.h \
     agenteP.h \
     qlearnigp.h \
-    agentepa.h
+    agentepa.h \
+    agentesarsa.h \
+    ar.h

@@ -131,7 +131,7 @@ int menor ,  mayor;
             if(rank == 1){
                 entorno->mostrar(ac,s);
             }
-            if(est->getEstado()->getFin() == true || s < menor || s > mayor){
+            if(est->getEstado()->isTerminal() == true || s < menor || s > mayor){
                 bandera = false;
                 disminuirE();
                 //   cout<<"encontro meta"<<endl;

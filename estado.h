@@ -10,7 +10,7 @@ private:
 public:
     Estado(int i);
 
-    bool getFin() const;
+    bool isTerminal() const;
     void setFin(bool value);
     int getIndex() const;
     void setIndex(int value);

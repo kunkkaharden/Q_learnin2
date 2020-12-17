@@ -1,7 +1,7 @@
 #include "estado.h"
 
 
-bool Estado::getFin() const
+bool Estado::isTerminal() const
 {
     return fin;
 }

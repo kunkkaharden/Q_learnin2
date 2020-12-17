@@ -33,7 +33,7 @@ void Qlearning :: entrenar(int it ){
                                        - agente->getValues()->num(s,ac) ),s,ac) ;
 
             s = sp;
-            if(est->getEstado()->getFin() == true){
+            if(est->getEstado()->isTerminal() == true){
                 bandera = false;
                 agente->disminuirE();
                 //   cout<<"encontro meta"<<endl;

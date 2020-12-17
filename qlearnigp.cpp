@@ -1,6 +1,7 @@
 #include "qlearnigp.h"
 #include<omp.h>
 #include<agente.h>
+#include<ar.h>
 QlearnigP::QlearnigP(Matrix *en, Matrix *re)
 {
     entorno = new Entorno(en,re);
@@ -19,7 +20,9 @@ void QlearnigP::entrenar(int it)
         size = omp_get_num_threads();
         rank = omp_get_thread_num();
         a = new AgentePa();
-        a->entrenar(rank, size, it,values,entorno);
+       // a->entrenar(rank, size, it,values,entorno);
+        a->entrenarRL(Q_Learning,rank,size,it,values,entorno);
+       // a->entrenarRL(Q_Learning,0,1,it,values,entorno);
         delete a;
     }
     fin = omp_get_wtime();

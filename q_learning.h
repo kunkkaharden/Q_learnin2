@@ -27,6 +27,7 @@ public:
     void addEstadoAccion(int estado, int accion, Recompensa_Estado *value);
     Q_Learning(int estados, int acciones);
     void mostrar();
+
   //  Recompensa_Estado get(int estado, int accion);
 };
 
