@@ -35,7 +35,7 @@ public:
     void entrenarSarsa(int rank, int size, int it, Matrix *qValues, Entorno *entorno);
     void entrenarRL(Algoritmo, int rank, int size, int it, Matrix *qValues, Entorno *entorno);
     void q(int s, int *pasos, Matrix *qValues, Entorno *entorno, int menor, int mayor);
-    void sarsa(int s,int *pasos, Matrix *qValues,Entorno *entorno);
+    void sarsa(int s, int *pasos, Matrix *qValues, Entorno *entorno, int menor, int mayor);
 
 };
 

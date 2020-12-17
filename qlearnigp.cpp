@@ -21,7 +21,8 @@ void QlearnigP::entrenar(int it)
         rank = omp_get_thread_num();
         a = new AgentePa();
        // a->entrenar(rank, size, it,values,entorno);
-        a->entrenarRL(Q_Learning,rank,size,it,values,entorno);
+        //a->entrenarRL(Q_Learning,rank,size,it,values,entorno);
+        a->entrenarRL(Sarsa,rank,size,it,values,entorno);
        // a->entrenarRL(Q_Learning,0,1,it,values,entorno);
         delete a;
     }
