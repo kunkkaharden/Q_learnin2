@@ -53,16 +53,18 @@ Matrix::Matrix( int x, int y, float a[]): cantFilas(x), cantColumnas(y)
 
 Matrix::Matrix( int x, int y): cantFilas(x), cantColumnas(y)
 {
-    //  srand(time(NULL));
+      srand(time(NULL));
     matrix = new float[x*y];
     
     for(int i = 0; i < filas()*columnas(); i++){
         
-        matrix[i]= 0+ rand() %10;//floatRandom();
+      //  matrix[i]= 0+ rand() %10;//floatRandom();
+         matrix[i]= floatRandom();
         
     }
     
-    //  mostrar();
+   ///   mostrar();
+  //    system("pause");
 }
 //Matrix :: Matrix ( int x ,int y, float *arr): cantFilas(x), cantColumnas(y) , matrix(arr){}
 

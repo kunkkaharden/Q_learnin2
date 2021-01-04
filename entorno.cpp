@@ -14,6 +14,10 @@ Entorno::Entorno(Matrix *en, Matrix *re): entorno(en), recompensa(re)
 
 Estado_Recompensa *Entorno::accion(int accion, int est)
 {
+
+
+
+
     Cordenadas * e = toCordenada(est);
     Cordenadas * estado = toCordenada(est);
     switch (accion ) {

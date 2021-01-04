@@ -20,13 +20,13 @@ void QlearnigP::entrenar(int it)
         size = omp_get_num_threads();
         rank = omp_get_thread_num();
         a = new AgentePa();
-       // a->entrenar(rank, size, it,values,entorno);
-        //a->entrenarRL(Q_Learning,rank,size,it,values,entorno);
-        a->entrenarRL(Sarsa,rank,size,it,values,entorno);
+     //  a->entrenar(rank, size, it,values,entorno);
+        a->entrenarRL(Q_Learning,rank,size,it,values,entorno);
+       // a->entrenarRL(Sarsa,rank,size,it,values,entorno);
        // a->entrenarRL(Q_Learning,0,1,it,values,entorno);
         delete a;
-    }
+  }
     fin = omp_get_wtime();
-    cout<<"tiempo: "<<fin - inicio<<endl;
+  cout<<"tiempo: "<<fin - inicio<<endl;
 }
 

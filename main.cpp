@@ -3,6 +3,7 @@
 #include<matrix.h>
 #include<qlearning.h>
 #include<qlearnigp.h>
+#include<recursos.h>
 using namespace std;
 
 
@@ -38,12 +39,23 @@ int main(int argc, char *argv[])
 
                 };
 
-*/
-    Matrix * entorno = new Matrix(8,8,e);
-    Matrix * recompensas = new Matrix(8,8,r);
 
+*/ Recursos *recursos = new Recursos();
+  //  Matrix *entorno = recursos->getMatrix("entorno.csv");
+  // Matrix *recompensas = recursos->getMatrix("recompensa.csv");
+  // Matrix * entorno = new Matrix(8,8,e);
+ //  Matrix * recompensas = new Matrix(8,8,r);
+    //entorno->mostrar();
+   // recompensas->mostrar();
+    int dimension = 500; ///matrix n x n
+    Matrix *entorno = recursos->crearEntorno(dimension);
+   // entorno->mostrar();
+   // system("pause");
+     Matrix *recompensas = recursos->crearRecompensas(dimension);
+   // recompensas->mostrar();
+        // system("pause");
     QlearnigP * q = new QlearnigP(entorno, recompensas);
-    q->entrenar(50);
+    q->entrenar(5000);
 cout<<"FIN"<<endl;
     return a.exec();
 }

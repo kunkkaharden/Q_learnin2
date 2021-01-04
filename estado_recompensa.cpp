@@ -15,6 +15,11 @@ Estado_Recompensa::Estado_Recompensa(Estado * e, float r):estado(e),recompensa(r
 
 }
 
+Estado_Recompensa::~Estado_Recompensa()
+{
+    delete estado;
+}
+
 float Estado_Recompensa::getRecompensa() const
 {
     return recompensa;

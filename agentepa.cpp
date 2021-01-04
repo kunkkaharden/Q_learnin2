@@ -128,11 +128,11 @@ void AgentePa:: entrenar(int rank , int size, int it , Matrix * qValues , Entorn
                           - qValues->num(s,ac) ),s,ac) ;
 
             s = sp;
-            if(rank == 0){
+          /* if(rank == 0){
                 entorno->mostrar(ac,s);
                 system("pause");
 
-            }
+            }*/
             if(est->getEstado()->isTerminal() == true || s < menor || s > mayor){
                 bandera = false;
                 disminuirE();
@@ -169,11 +169,11 @@ void AgentePa::entrenarRL(Algoritmo alg, int rank, int size, int it, Matrix *qVa
 
     }else if(size > 2){
         muestra = qValues->filas() / (size -1);
-        if(rank == 0){
+        if(this->rank == 0){
             e = 0.30;
             menor =0;
             mayor = qValues->filas();
-        }else if(rank == size - 1){
+        }else if(this->rank == size - 1){
             menor = (rank -1) * muestra ;
             mayor = qValues->filas();
         }else{
@@ -199,7 +199,8 @@ void AgentePa::entrenarRL(Algoritmo alg, int rank, int size, int it, Matrix *qVa
             sarsa(s,&pasos,qValues,entorno,menor,mayor);
         }
 
-        if(rank ==0)
+        if(this->rank == 0)
+
             cout<<"pasos: "<<pasos<<" por "<<rank<<endl;
         //  system("pause");
     }
@@ -217,20 +218,23 @@ void AgentePa::q(int s,int *pasos, Matrix *qValues,Entorno *entorno,int menor , 
     //**************
     while(bandera){
         (*pasos)++;
+
         ac = politica(s,qValues);
         delete est;
         est = entorno->accion(ac,s);
 
         sp = est->getEstado()->getIndex();
         r = est->getRecompensa();
-        //#pragma omp critical
+
+
+       // #pragma omp critical
         qValues->num(qValues->num(s,ac) +
                      a *
                      (r + y * qValues->num(sp,mejorAccion(sp,qValues))
                       - qValues->num(s,ac) ),s,ac) ;
 
         s = sp;
-        /*  if(rank == 0){
+         /*if(rank == 0){
             entorno->mostrar(ac,s);
             cout<<"rank: "<<rank<<endl;
             system("pause");
@@ -243,7 +247,7 @@ void AgentePa::q(int s,int *pasos, Matrix *qValues,Entorno *entorno,int menor , 
             //  agente->getValues()->mostrar();
             //   system("pause");
         }
-        if((*pasos) > 2000){
+        if((*pasos) > 500000){
             bandera = false;
 
 
@@ -302,7 +306,7 @@ void AgentePa::sarsa(int s,int *pasos, Matrix *qValues,Entorno *entorno,int meno
             //  agente->getValues()->mostrar();
             //   system("pause");
         }
-        if((*pasos) > 2000){
+        if((*pasos) > 8000){
             bandera = false;
 
 

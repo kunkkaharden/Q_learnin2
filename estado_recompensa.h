@@ -9,6 +9,7 @@ private :
     float recompensa;
 public:
     Estado_Recompensa(Estado * e, float r);
+    ~ Estado_Recompensa();
 
     Estado *getEstado() const;
     void setEstado(Estado *value);
