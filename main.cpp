@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
  //  Matrix * recompensas = new Matrix(8,8,r);
     //entorno->mostrar();
    // recompensas->mostrar();
-    int dimension = 500; ///matrix n x n
+    int dimension = 100; ///matrix n x n
     Matrix *entorno = recursos->crearEntorno(dimension);
    // entorno->mostrar();
    // system("pause");
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
    // recompensas->mostrar();
         // system("pause");
     QlearnigP * q = new QlearnigP(entorno, recompensas);
-    q->entrenar(5000);
-cout<<"FIN"<<endl;
+    q->entrenar(10000);
+cout<<"FIN"<<"\a"<<endl;
     return a.exec();
 }

@@ -25,7 +25,9 @@ SOURCES += main.cpp \
     agenteP.cpp \
     qlearnigp.cpp \
     agentepa.cpp \
-    agentesarsa.cpp
+    agentesarsa.cpp \
+    recursos.cpp \
+    arreglofloat.cpp
 
 HEADERS += \
     agente.h \
@@ -41,4 +43,6 @@ HEADERS += \
     qlearnigp.h \
     agentepa.h \
     agentesarsa.h \
-    ar.h
+    ar.h \
+    recursos.h \
+    arreglofloat.h

@@ -121,7 +121,7 @@ void AgentePa:: entrenar(int rank , int size, int it , Matrix * qValues , Entorn
 
             sp = est->getEstado()->getIndex();
             r = est->getRecompensa();
-#pragma omp critical
+//#pragma omp critical
             qValues->num(qValues->num(s,ac) +
                          a *
                          (r + y * qValues->num(sp,mejorAccion(sp,qValues))
@@ -227,7 +227,7 @@ void AgentePa::q(int s,int *pasos, Matrix *qValues,Entorno *entorno,int menor , 
         r = est->getRecompensa();
 
 
-       // #pragma omp critical
+        #pragma omp critical
         qValues->num(qValues->num(s,ac) +
                      a *
                      (r + y * qValues->num(sp,mejorAccion(sp,qValues))
@@ -277,7 +277,7 @@ void AgentePa::sarsa(int s,int *pasos, Matrix *qValues,Entorno *entorno,int meno
         r = est->getRecompensa();
         if(!est->getEstado()->isTerminal()){
             acp =  politica(sp,qValues);
-#pragma omp critical
+//#pragma omp critical
             qValues->num(qValues->num(s,ac) +
                          a *
                          (r + y * qValues->num(sp,acp)
@@ -285,7 +285,7 @@ void AgentePa::sarsa(int s,int *pasos, Matrix *qValues,Entorno *entorno,int meno
 
 
         }else{
-#pragma omp critical
+//#pragma omp critical
             qValues->num(qValues->num(s,ac) +
                          a *
                          (r  - qValues->num(s,ac) ),s,ac) ;
@@ -306,7 +306,7 @@ void AgentePa::sarsa(int s,int *pasos, Matrix *qValues,Entorno *entorno,int meno
             //  agente->getValues()->mostrar();
             //   system("pause");
         }
-        if((*pasos) > 8000){
+        if((*pasos) > 500000){
             bandera = false;
 
 
